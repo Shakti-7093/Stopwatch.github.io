@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Stopwatch</title>
+    <link rel="icon" type="image/x-icon" href="31048.png">
+    <link rel="stylesheet" href="stopwatch.css">
+</head>
+
+<body>
+    <!-- 10hr 30min 11sec -->
+    <!-- stop reset -->
+    <!-- continue reset -->
+    <!-- start -->
+
+
+    <!-- c1 -->
+    <div class="container1">
+        <div class="number">
+            <p id="min">00</p>
+            <span>min</span>
+        </div>
+        <div class="number">
+            <p id="sec">00</p>
+            <span>sec</span>
+        </div>
+        <div class="number">
+            <p id="ms">00</p>
+            <span>ms</span>
+        </div>
+    </div>
+    <!--  -->
+
+
+    <!-- c2 -->
+    <div class="container2">
+        <button id="stopbtn" onclick="stop()">Stop</button>
+        <button id="resetbtn" onclick="reset()">Reset</button>
+        <button id="startbtn" onclick="start()">Start</button>
+        <!-- <button>Start</button> -->
+    </div>
+    <!--  -->
+</body>
+
+<script>
+// stopped ->  00:00:00 -> start
+// running ->  10:30:11 -> stop reset
+// continue ->  10:30:11 -> start reset
+
+
+const btnstatus = (status) =>{
+    if(status == "stopped"){
+        document.getElementById("startbtn").style.display = "block";
+        document.getElementById("stopbtn").style.display = "none";
+        document.getElementById("resetbtn").style.display = "none";
+    }
+    else if(status == "running"){
+        document.getElementById("startbtn").style.display = "none";
+        document.getElementById("stopbtn").style.display = "block";
+        document.getElementById("resetbtn").style.display = "block";
+    }
+    else if(status == "continue"){
+        document.getElementById("startbtn").style.display = "block";
+        document.getElementById("stopbtn").style.display = "none";
+        document.getElementById("resetbtn").style.display = "block";
+    }
+}
+
+
+
+let time = {
+    min: 0,
+    sec: 0,
+    ms: 0
+}
+
+
+let min = document.getElementById("min");
+let sec = document.getElementById("sec");
+let ms = document.getElementById("ms");
+
+
+
+const start = ()=>{
+   btnstatus("running");
+
+   starttimer = setInterval(()=>{
+    time.ms++;
+
+    if(time.ms == 100){
+        time.ms = 0;
+        time.sec++;
+    }
+    if (time.sec == 60){
+        time.sec = 0;
+        time.min++;
+    }
+    if(time.min == 60){
+        time.min = 0;
+        // reset 
+    }
+
+   
+    ms.innerHTML = time.ms;
+    sec.innerHTML = time.sec;
+    min.innerHTML = time.min;
+
+    if(time.min < 10){
+        min.innerHTML = "0" + time.min;
+    }
+    if(time.sec < 10){
+        sec.innerHTML = "0" + time.sec;
+    }
+    if(time.ms < 10){
+        ms.innerHTML = "0" + time.ms;
+    }
+   },10)
+
+}
+
+const stop = ()=>{
+    clearInterval(starttimer);
+    btnstatus("continue");
+}
+const reset = ()=>{
+    stop();
+    time.min = 0;
+    time.sec = 0;
+    time.ms = 0;
+
+    ms.innerHTML = "00";
+    sec.innerHTML = "00";
+    min.innerHTML = "00";
+    btnstatus("stopped");
+}
+
+btnstatus("stopped");
+</script>
+
+</html>
